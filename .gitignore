@@ -1,0 +1,7 @@
+# health-os-bd — static site, no build
+node_modules/
+.env
+.env.*
+*.log
+.DS_Store
+Thumbs.db

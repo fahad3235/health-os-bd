@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Health OS BD — হেলথ ওএস বিডি</title>
+<meta name="description" content="Unified offline health dashboard: water, sleep, BMI/BMR/TDEE, medicine cabinet. EN/বাংলা.">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<header class="topbar">
+  <div class="brand">
+    <span class="brand-mark" aria-hidden="true">✚</span>
+    <div>
+      <h1 id="appTitle">Health OS BD</h1>
+      <p id="tagline">Your unified health dashboard — fully offline.</p>
+    </div>
+  </div>
+  <button id="langBtn" class="lang-btn" type="button">বাংলা</button>
+</header>
+
+<div class="disclaimer" id="disclaimer" role="note"></div>
+
+<nav class="tabs" id="tabs" aria-label="Sections">
+  <button type="button" data-tab="dashboard" class="active"></button>
+  <button type="button" data-tab="body"></button>
+  <button type="button" data-tab="water"></button>
+  <button type="button" data-tab="sleep"></button>
+  <button type="button" data-tab="meds"></button>
+  <button type="button" data-tab="trends"></button>
+  <button type="button" data-tab="data"></button>
+</nav>
+
+<main id="main">
+  <!-- ============ DASHBOARD ============ -->
+  <section id="tab-dashboard" class="tab active">
+    <div class="card score-card">
+      <h2 id="scoreTitle"></h2>
+      <div class="score-wrap">
+        <svg class="ring big" viewBox="0 0 120 120" aria-hidden="true">
+          <circle cx="60" cy="60" r="52" class="ring-bg"></circle>
+          <circle cx="60" cy="60" r="52" class="ring-fg" id="scoreRing"></circle>
+        </svg>
+        <div class="score-num"><span id="scoreNum">—</span><small>/100</small></div>
+      </div>
+      <div id="scoreEmpty"></div>
+      <h3 id="breakdownTitle"></h3>
+      <div id="breakdown"></div>
+      <details class="formula"><summary id="howScore"></summary><p id="howScoreBody"></p></details>
+    </div>
+
+    <div class="grid2">
+      <div class="card">
+        <h2 id="weeklyMiniTitle"></h2>
+        <div id="miniChart" class="barchart"></div>
+      </div>
+      <div class="card">
+        <h2 id="quickStatsTitle">Today</h2>
+        <div class="stats" id="quickStats"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ BODY ============ -->
+  <section id="tab-body" class="tab">
+    <div class="card">
+      <h2 id="bodyTitle"></h2>
+      <div class="seg" id="unitSeg" role="group">
+        <button type="button" data-unit="metric" class="active"></button>
+        <button type="button" data-unit="imperial"></button>
+      </div>
+      <form id="bodyForm" class="formgrid" novalidate>
+        <label><span id="sexLabel"></span>
+          <select id="fSex"><option value="male">Male</option><option value="female">Female</option></select>
+        </label>
+        <label><span id="ageLabel"></span><input id="fAge" inputmode="numeric" autocomplete="off"></label>
+        <label id="heightWrap"><span id="heightLabel"></span><input id="fHeight" inputmode="decimal" autocomplete="off"></label>
+        <label id="heightImpWrap" hidden><span id="heightImpLabel"></span>
+          <span class="duet"><input id="fHeightFt" inputmode="numeric" autocomplete="off"><input id="fHeightIn" inputmode="decimal" autocomplete="off"></span>
+        </label>
+        <label><span id="weightLabel"></span><input id="fWeight" inputmode="decimal" autocomplete="off"></label>
+        <div class="formerr" id="bodyErr" hidden></div>
+        <button type="submit" id="saveBodyBtn" class="btn primary"></button>
+      </form>
+      <div id="bodyMsg" class="msg" hidden></div>
+    </div>
+    <div class="card" id="bodyResults" hidden>
+      <div class="bmi-row">
+        <div>
+          <h3 id="bmiLabel"></h3>
+          <div class="bmi-num" id="bmiNum">—</div>
+          <div class="bmi-cat" id="bmiCat"></div>
+        </div>
+        <svg class="gauge" viewBox="0 0 200 110" aria-hidden="true">
+          <path d="M10 100 A 90 90 0 0 1 190 100" class="gauge-bg" />
+          <path d="M10 100 A 90 90 0 0 1 190 100" class="gauge-fg" id="bmiGauge" />
+        </svg>
+      </div>
+      <div class="kv"><span id="bmrLabel"></span><b id="bmrNum"></b></div>
+      <h3 id="tdeeLabel"></h3>
+      <div id="tdeeList" class="kvlist"></div>
+      <div class="kv"><span id="healthyRangeLabel"></span><b id="healthyRangeNum"></b></div>
+    </div>
+  </section>
+
+  <!-- ============ WATER ============ -->
+  <section id="tab-water" class="tab">
+    <div class="card score-card">
+      <h2 id="waterTitle"></h2>
+      <div class="score-wrap">
+        <svg class="ring big" viewBox="0 0 120 120" aria-hidden="true">
+          <circle cx="60" cy="60" r="52" class="ring-bg"></circle>
+          <circle cx="60" cy="60" r="52" class="ring-fg water" id="waterRing"></circle>
+        </svg>
+        <div class="score-num"><span id="waterNum">0</span><small>ml</small></div>
+      </div>
+      <p class="center muted"><span id="waterOfGoal"></span></p>
+      <h3 id="quickAddTitle"></h3>
+      <div class="btnrow" id="quickBtns"></div>
+      <div class="row">
+        <input id="customMl" inputmode="numeric" autocomplete="off">
+        <button type="button" id="addCustomBtn" class="btn"></button>
+      </div>
+      <div class="row">
+        <label class="grow"><span id="goalLabel"></span><input id="goalMl" inputmode="numeric" autocomplete="off"></label>
+        <button type="button" id="saveGoalBtn" class="btn"></button>
+      </div>
+      <div class="formerr" id="waterErr" hidden></div>
+      <div class="msg" id="waterMsg" hidden></div>
+    </div>
+    <div class="grid2">
+      <div class="card">
+        <h2 id="todayLogTitle"></h2>
+        <ul id="waterLog" class="loglist"></ul>
+        <p id="waterLogEmpty" class="muted"></p>
+      </div>
+      <div class="card">
+        <h2 id="last7Title"></h2>
+        <div id="waterHist" class="barchart"></div>
+        <p id="waterHistEmpty" class="muted"></p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ SLEEP ============ -->
+  <section id="tab-sleep" class="tab">
+    <div class="card">
+      <h2 id="sleepTitle"></h2>
+      <form id="sleepForm" class="formgrid" novalidate>
+        <input type="hidden" id="sleepEditId">
+        <label><span id="bedDateLabel"></span><input type="date" id="fBedDate"></label>
+        <label><span id="bedLabel"></span><input type="time" id="fBed"></label>
+        <label><span id="wakeLabel"></span><input type="time" id="fWake"></label>
+        <div class="full">
+          <span id="qualityLabel"></span>
+          <div class="stars" id="stars" role="radiogroup" aria-label="quality">
+            <button type="button" data-q="1">★</button><button type="button" data-q="2">★</button><button type="button" data-q="3">★</button><button type="button" data-q="4">★</button><button type="button" data-q="5">★</button>
+          </div>
+          <div class="muted small" id="qualityHint"></div>
+        </div>
+        <label class="full"><span id="noteLabel"></span><input id="fNote" maxlength="280"></label>
+        <div class="muted small full" id="midnightHint"></div>
+        <div class="formerr full" id="sleepErr" hidden></div>
+        <div class="full btnrow">
+          <button type="submit" id="saveSleepBtn" class="btn primary"></button>
+          <button type="button" id="cancelSleepBtn" class="btn" hidden></button>
+        </div>
+      </form>
+      <div class="msg" id="sleepMsg" hidden></div>
+    </div>
+    <div class="grid2">
+      <div class="card">
+        <h2 id="statsTitle"></h2>
+        <div class="stats" id="sleepStats"></div>
+      </div>
+      <div class="card">
+        <h2 id="recentTitle"></h2>
+        <ul id="sleepList" class="loglist"></ul>
+        <p id="sleepEmpty" class="muted"></p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ MEDS ============ -->
+  <section id="tab-meds" class="tab">
+    <div class="card">
+      <h2 id="medsTitle"></h2>
+      <div id="medAlerts" class="alerts"></div>
+      <h3 id="scheduleTitle"></h3>
+      <ul id="scheduleList" class="loglist"></ul>
+      <p id="scheduleEmpty" class="muted"></p>
+    </div>
+    <div class="grid2">
+      <div class="card">
+        <h3 id="addMedTitle"></h3>
+        <form id="medForm" class="formgrid" novalidate>
+          <label><span id="mNameLabel"></span><input id="mName" maxlength="120"></label>
+          <label><span id="mStrengthLabel"></span><input id="mStrength" maxlength="60"></label>
+          <label><span id="mQtyLabel"></span><input id="mQty" inputmode="numeric" autocomplete="off"></label>
+          <label><span id="mExpiryLabel"></span><input type="date" id="mExpiry"></label>
+          <label class="full"><span id="mTimesLabel"></span><input id="mTimes" placeholder="08:00, 20:00" autocomplete="off"></label>
+          <label><span id="mForLabel"></span><input id="mFor" maxlength="60"></label>
+          <label><span id="mLowLabel"></span><input id="mLow" inputmode="numeric" autocomplete="off" value="5"></label>
+          <div class="formerr full" id="medErr" hidden></div>
+          <div class="full"><button type="submit" id="addMedBtn" class="btn primary"></button></div>
+        </form>
+        <div class="msg" id="medMsg" hidden></div>
+      </div>
+      <div class="card">
+        <h3 id="cabinetTitle"></h3>
+        <ul id="medList" class="loglist"></ul>
+        <p id="medEmpty" class="muted"></p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ TRENDS ============ -->
+  <section id="tab-trends" class="tab">
+    <div class="card">
+      <h2 id="trendsTitle"></h2>
+      <div class="tablewrap"><table class="trendtable" id="trendTable">
+        <thead><tr>
+          <th id="colDay"></th><th id="colWater"></th><th id="colSleep"></th><th id="colScore"></th>
+        </tr></thead>
+        <tbody></tbody>
+      </table></div>
+      <p id="trendsEmpty" class="muted"></p>
+    </div>
+  </section>
+
+  <!-- ============ DATA ============ -->
+  <section id="tab-data" class="tab">
+    <div class="card">
+      <h2 id="dataTitle"></h2>
+      <div class="btnrow">
+        <button type="button" id="exportBtn" class="btn primary"></button>
+        <button type="button" id="importBtn" class="btn"></button>
+        <input type="file" id="importFile" accept="application/json,.json" hidden>
+      </div>
+      <div class="msg" id="dataMsg" hidden></div>
+      <div class="formerr" id="dataErr" hidden></div>
+      <p class="muted small" id="storageNote"></p>
+      <hr>
+      <button type="button" id="resetBtn" class="btn danger"></button>
+    </div>
+  </section>
+</main>
+
+<footer class="foot">
+  <p id="footNote"></p>
+  <p class="muted small" id="disclaimerFoot"></p>
+</footer>
+
+<script src="js/logic.js"></script>
+<script src="js/i18n.js"></script>
+<script src="js/app.js"></script>
+</body>
+</html>
